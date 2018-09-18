@@ -12,6 +12,7 @@ import java.io.InputStream;
 public class MyFirstClassLoader extends ClassLoader {
     private final String extSuffix = ".class";
     private String classloaderName;
+    private String path;
 
     /**
      * ClassLoader的doc文档中说明 Each instance of ClassLoader has an associated parent class loader.
@@ -30,6 +31,10 @@ public class MyFirstClassLoader extends ClassLoader {
         this.classloaderName = classloaderName;
     }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     /**
      * ClassLoader类的loadClass方法里会调用findClass方法来加载这个类。
      *
@@ -37,7 +42,9 @@ public class MyFirstClassLoader extends ClassLoader {
      * @return 该name所对应的类的Class对象
      */
     @Override
-    public Class<?> findClass(String className) {
+    protected Class<?> findClass(String className) {
+        System.out.println("findClass invoked: " + className);
+        System.out.println("class loader name: " + this.classloaderName);
         byte[] data = loadClassData(className);
         // 调用父类的defineClass方法来返回该类对应的Class对象
         return this.defineClass(className, data, 0, data.length);
@@ -46,16 +53,18 @@ public class MyFirstClassLoader extends ClassLoader {
     /**
      * 用自己定义的方法来加载类的二进制文件
      *
-     * @param name 类的二进制名字（ClassLoader类的doc中有解释binary name。类似于java.lang.String）
+     * @param className 类的二进制名字（ClassLoader类的doc中有解释binary className。类似于java.lang.String）
      * @return 加载后的二进制数组
      */
-    public byte[] loadClassData(String name) {
+    public byte[] loadClassData(String className) {
         InputStream is = null;
         ByteArrayOutputStream baos = null;
         byte[] data = null;
+        // mac系统换成 /
+        className = className.replace(".", "/");
 
         try {
-            is = new FileInputStream(new File(name + this.extSuffix));
+            is = new FileInputStream(new File(this.path + className + this.extSuffix));
             baos = new ByteArrayOutputStream();
 
             int ch;
@@ -80,8 +89,23 @@ public class MyFirstClassLoader extends ClassLoader {
     }
 
     public static void main(String[] args) throws Exception {
-        MyFirstClassLoader classLoader = new MyFirstClassLoader("loader1");
-        classLoader.test(classLoader);
+        MyFirstClassLoader loader1 = new MyFirstClassLoader("loader1");
+//        loader1.setPath("/Users/ddcc/IdeaProjects/jvm_lecture/out/production/classes/");
+        loader1.setPath("/Users/ddcc/Desktop/");
+        Class<?> clazz = loader1.loadClass("com.ssy.jvm.classloader.MyTest1");
+        System.out.println("class: " + clazz.hashCode());
+        System.out.println(clazz.newInstance());
+
+        System.out.println();
+
+        MyFirstClassLoader loader2 = new MyFirstClassLoader("loader2");
+        loader2.setPath("/Users/ddcc/Desktop/");
+
+        Class<?> clazz2 = loader2.loadClass("com.ssy.jvm.classloader.MyTest1");
+        System.out.println("class : " + clazz2.hashCode());
+        System.out.println(clazz2.newInstance());
+
+        System.out.println();
     }
 
     /**
@@ -92,5 +116,6 @@ public class MyFirstClassLoader extends ClassLoader {
     public void test(ClassLoader classLoader) throws Exception {
         Class<?> clazz = classLoader.loadClass("com.ssy.jvm.classloader.MyTest1");
         System.out.println(clazz.newInstance());
+        System.out.println(clazz.getClassLoader());
     }
 }
