@@ -94,18 +94,40 @@ public class MyFirstClassLoader extends ClassLoader {
         loader1.setPath("/Users/ddcc/Desktop/");
         Class<?> clazz = loader1.loadClass("com.ssy.jvm.classloader.MyTest1");
         System.out.println("class: " + clazz.hashCode());
+        Object object = clazz.newInstance();
+        System.out.println(object);
+        System.out.println();
+
+        loader1 = null;
+        clazz = null;
+        object = null;
+
+        System.gc();
+        Thread.sleep(200000);
+
+        loader1 = new MyFirstClassLoader("loader1");
+        loader1.setPath("/Users/ddcc/Desktop/");
+        clazz = loader1.loadClass("com.ssy.jvm.classloader.MyTest1");
+        System.out.println("class: " + clazz.hashCode());
         System.out.println(clazz.newInstance());
 
         System.out.println();
 
-        MyFirstClassLoader loader2 = new MyFirstClassLoader("loader2");
-        loader2.setPath("/Users/ddcc/Desktop/");
-
-        Class<?> clazz2 = loader2.loadClass("com.ssy.jvm.classloader.MyTest1");
-        System.out.println("class : " + clazz2.hashCode());
-        System.out.println(clazz2.newInstance());
-
-        System.out.println();
+//        MyFirstClassLoader loader2 = new MyFirstClassLoader("loader2", loader1);
+//        loader2.setPath("/Users/ddcc/Desktop/");
+//        Class<?> clazz2 = loader2.loadClass("com.ssy.jvm.classloader.MyTest1");
+//        System.out.println("class : " + clazz2.hashCode());
+//        System.out.println(clazz2.newInstance());
+//
+//        System.out.println();
+////        MyFirstClassLoader loader3 = new MyFirstClassLoader("loader3", loader2);
+//        MyFirstClassLoader loader3 = new MyFirstClassLoader("loader3");
+//        loader3.setPath("/Users/ddcc/Desktop/");
+//        Class<?> clazz3 = loader3.loadClass("com.ssy.jvm.classloader.MyTest1");
+//        System.out.println("class : " + clazz3.hashCode());
+//        System.out.println(clazz3.newInstance());
+//
+//        System.out.println();
     }
 
     /**
