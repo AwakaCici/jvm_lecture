@@ -25,6 +25,10 @@ public class MyFirstClassLoader extends ClassLoader {
         this.classloaderName = classloaderName;
     }
 
+    public MyFirstClassLoader(ClassLoader classLoader) {
+        super(classLoader);
+    }
+
     public MyFirstClassLoader(String classloaderName, ClassLoader classLoader) {
         // 这边是用自己定义的类加载器作为MyFirstClassLoader的双亲
         super(classLoader);
