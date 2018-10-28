@@ -14,4 +14,10 @@ public class MyTest2 {
     public void setX(int x) {
         this.x = x;
     }
+
+    private void test(String str) {
+        synchronized (str) {
+            System.out.println("Hello World");
+        }
+    }
 }
