@@ -8,7 +8,7 @@ public class MyTest7 {
         Anaimal dog = new Dog();
 
         anaimal.test("hello");//animal str
-        dog.test(new Date());//dog date
+        dog.test(new Date());// dog date
     }
 }
 
