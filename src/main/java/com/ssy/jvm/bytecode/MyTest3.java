@@ -7,12 +7,18 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 
 public class MyTest3 {
+    public static void main(String[] args) throws IOException {
+        MyTest3 myTest3 = new MyTest3();
+        myTest3.test();
+    }
+
     public void test() throws IOException, FileNotFoundException {
         try {
-            InputStream in = new FileInputStream("test.txt");
+            InputStream in = new FileInputStream("./conf/test.txt");
 
             ServerSocket serverSocket = new ServerSocket(999);
             serverSocket.accept();
+            System.out.println("test");
         } catch (FileNotFoundException ex) {
 
         } catch (IOException ex) {
